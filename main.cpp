@@ -66,8 +66,8 @@ class CPU{
             memory[address] = A;
         }
 
-        void LDX(uint8_t address){
-            X = memory[address];
+        void LDX(uint8_t value){
+            X = value;
 
             updateZN(X);
         }
@@ -97,11 +97,26 @@ class CPU{
             case 0xA4: // LDY From Memory
                 LDY(memory[fetch()]);
                 break;
-            case 0xA6: // LDX Load into X
+            case 0xB4: //LDY From Memory + X
+                LDY(memory[static_cast<uint8_t>(fetch() + X)]);
+                break;
+            case 0xA2: //LDX Load Immediatley for X
                 LDX(fetch());
+                break;
+            case 0xA6: // LDX  From Memory
+                LDX(memory[fetch()]);
+                break;
+            case 0xB6: //LDX from memory + Y
+                LDX(memory[static_cast<uint8_t>(fetch() + Y)]);
                 break;
             case 0xA9: // LDA
                 LDA(fetch());
+                break;
+            case 0xA5: //LDA From Memory
+                LDA(memory[fetch()]);
+                break;
+            case 0xB5: //LDA From Memory + X
+                LDA(memory[static_cast<uint8_t>(fetch() + X)]);
                 break;
             case 0x03:// Adds Value
                 A += Y;

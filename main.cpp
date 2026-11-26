@@ -24,12 +24,23 @@ class CPU{
         uint8_t Y = 0;
         uint8_t X = 0;
 
+        uint8_t SP = 0;
+
         uint16_t PC = 0;
+
+        uint64_t cycles = 0;
 
         bool running = true;
 
         uint8_t fetch(){
             return memory[PC++];
+        }
+
+        uint16_t fetch16(){
+            uint8_t low = fetch();
+            uint8_t high = fetch();
+
+            return(high << 8) | low;
         }
 
         void setFlag(Flag flag, bool value){
@@ -136,8 +147,17 @@ class CPU{
             case 0x65: // ADC - Add numbers from memory
                 ADC(memory[fetch()]);
                 break;
-            case 0x75:
+            case 0x75: //ADC Add memory + X
                 ADC(memory[static_cast<uint8_t>(fetch() + X)]);
+                break;
+            case 0x6D: // ADC Absolute
+                ADC(memory[fetch16()]);
+                break;
+            case 0x7D: // ADC Absolute + X
+                ADC(memory[static_cast<uint16_t>(fetch16() + X)]);
+                break;
+            case 0x79: // ADC Absolute + Y
+                ADC(memory[static_cast<uint16_t>(fetch16() + Y)]);
                 break;
             case 0x85: // Stores Values into Memory
                 STA(fetch());

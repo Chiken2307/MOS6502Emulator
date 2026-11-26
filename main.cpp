@@ -66,6 +66,21 @@ class CPU{
             memory[address] = A;
         }
 
+        void LDX(uint8_t address){
+            X = memory[address];
+
+            updateZN(X);
+        }
+
+        void LDY(uint8_t value){
+            Y = value;
+            updateZN(Y);
+        }
+
+        void LDA(uint8_t value){
+            A = value;
+            updateZN(A);
+        }
 
         void execute(uint8_t opcode){
             switch (opcode)
@@ -76,17 +91,29 @@ class CPU{
             case 0x02: // Loads value into register Y
                 Y = fetch();
                 break;
-            case 0x03:
-                X = fetch();
+            case 0xA0: // LDY
+                LDY(fetch());
                 break;
-            case 0x04:// Adds Value
+            case 0xA4: // LDY From Memory
+                LDY(memory[fetch()]);
+                break;
+            case 0xA6: // LDX Load into X
+                LDX(fetch());
+                break;
+            case 0xA9: // LDA
+                LDA(fetch());
+                break;
+            case 0x03:// Adds Value
                 A += Y;
                 break;
-            case 0x05: // Subtracts Value
+            case 0x04: // Subtracts Value
                 A -= Y;
                 break;
             case 0x18: // Clear Flags
                 setFlag(C, false);
+                break;
+            case 0x38: //SEC or Set Carry
+                setFlag(C, true);
                 break;
             case 0x69: // ADC - Add to Carry so flags work
                 ADC(fetch());
@@ -121,7 +148,10 @@ class CPU{
 
 int main() {
     CPU cpu;
+    CPU cpu2;
 
+
+    // CPU 1
 
     //Stored Value 50 into the memory
     cpu.memory[0] = 0x01;
@@ -143,12 +173,30 @@ int main() {
 
     cpu.memory[9] = 0xFF;
 
-
-
     cpu.run();
 
-    std::cout <<"Result: "
+
+    // CPU 2
+
+    cpu2.memory[0] = 0x01;
+    cpu2.memory[1] = 10;
+    cpu2.memory[2] = 0x85;
+    cpu2.memory[3] = 0x10;
+    cpu2.memory[4] = 0xA4;
+    cpu2.memory[5] = 0x10;
+    cpu2.memory[6] = 0x01;
+    cpu2.memory[7] = 60;
+    cpu2.memory[8] = 0x03;
+    cpu2.memory[9] = 0xFF;
+
+    cpu2.run();
+
+    std::cout <<"Result (CPU 1): "
             << static_cast<int>(cpu.A)
+            <<'\n';
+
+    std::cout <<"Result (CPU 2): "
+            << static_cast<int>(cpu2.A)
             <<'\n';
 
     return 0;

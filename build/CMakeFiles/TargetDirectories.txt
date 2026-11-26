@@ -1,0 +1,4 @@
+C:/Users/Chiken/Desktop/CPP/Emulators/MOS 6502/build/CMakeFiles/mos6502.dir
+C:/Users/Chiken/Desktop/CPP/Emulators/MOS 6502/build/CMakeFiles/run.dir
+C:/Users/Chiken/Desktop/CPP/Emulators/MOS 6502/build/CMakeFiles/edit_cache.dir
+C:/Users/Chiken/Desktop/CPP/Emulators/MOS 6502/build/CMakeFiles/rebuild_cache.dir
